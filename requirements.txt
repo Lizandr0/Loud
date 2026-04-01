@@ -1,0 +1,6 @@
+markdown-it-py==4.0.0
+mdurl==0.1.2
+Pygments==2.20.0
+python-vlc==3.0.21203
+rich==14.3.3
+yt-dlp==2026.3.17

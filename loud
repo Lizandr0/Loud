@@ -1,0 +1,60 @@
+#!/home/lizandro/Escritorio/loud/venv/bin/python
+from yt_dlp import YoutubeDL
+from rich.panel import Panel
+from rich.console import Console
+from rich.table import Table
+from rich.prompt import Prompt
+from rich.prompt import IntPrompt
+from rich.text import Text
+from rich.progress import(Progress, SpinnerColumn, BarColumn, TextColumn, DownloadColumn, TransferSpeedColumn, TimeElapsedColumn)
+from ui.ui_menu_inicio import main_menu
+import sys
+import yt_dlp
+import time
+import os
+
+console=Console()
+
+progress=Progress(
+TextColumn("[bold bright_blue]{task.description}"),
+SpinnerColumn(style='bold bright_magenta', spinner_name="earth"),
+BarColumn(
+    bar_width=40,
+    style="bright_red",
+    complete_style="bright_blue",
+    finished_style="bright_green"),
+DownloadColumn(),
+TransferSpeedColumn(),
+TimeElapsedColumn(),
+expand=True,
+)
+    
+def salida():
+    a=Prompt.ask("[bold bright_red]Deseas salir bro? [yellow](Y/N)")
+
+    if a.lower() == 'y':
+        console.print(f'''[#9999FF]
+GRACIAS POR USAR MI SOFTWARE :)
+PYTHON: {sys.version}
+EJECUTADO EN: {sys.platform}
+                      ''')
+    else:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        with progress:
+            task=progress.add_task('REINICIANDO')
+            for i in range(100):
+                time.sleep(0.01)
+                progress.update(task, advance=1)
+        main()
+
+def main():
+    try:
+        main_menu(console)
+
+    except KeyboardInterrupt:
+        console.print('[bold bright_red]Cancelado por el usuario!\n')
+        salida()
+        sys.exit(0)
+
+if __name__ == "__main__":
+    main()
