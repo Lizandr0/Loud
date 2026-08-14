@@ -1,0 +1,539 @@
+DataTable > .datatable--cursor {
+    background: $accent;
+    color: $text;
+    text-style: bold;
+}
+/* 1. Estilos del Menú Lateral (Sidebar) */
+Sidebar {
+    dock: left;
+    width: 23;
+    height: 100%;
+    background: transparent;
+    border-right: ascii $accent;
+}
+
+/* menu lateral */
+
+#sidebar-title {
+    padding: 1 5;
+    background: transparent;
+    color: $accent;
+    text-style: italic bold;
+    text-align: center;
+   }
+
+#menu_list {
+    height: 1fr;
+    border: ascii $accent;
+    background: transparent;
+    color: #ffffff;
+    text-style: bold;
+}
+
+/*playlists*/
+
+#table-playlists{
+    background: transparent;
+    width: 100%;
+    border: ascii $accent;
+    height: 1fr;
+}
+
+/*musica local styles*/
+
+#container-local-music{
+    border: ascii $accent;
+}
+#title-local-music{
+    color: $surface;
+    text-style: bold;
+    text-align: center;
+    background: $accent;
+}
+#folders_list{
+    background: transparent;
+    width: 100%;
+    height: 1fr;
+    text-wrap: nowrap;
+    overflow-x: hidden;
+}
+/* Opción cuando se pasa el cursor por encima */
+#menu_list > .option-list--option-hover {
+    background: #313244;
+    color: #cdd6f4;
+}
+
+/* Opción activa o seleccionada en la lista */
+#menu_list > .option-list--option-highlighted {
+    background: $accent;
+    color: #11111b;
+    text-style: bold;
+}
+
+
+/*pantalla downloader*/
+
+#title-downloader{
+    text-align: center;
+    text-style: bold;
+    color: $text;
+    background: $accent;
+    padding: 1 0;
+}
+#content_main {
+    width: 100%;
+    height: 1fr;
+    align: center top;
+    overflow-y: scroll;
+}
+#content-inputs{
+    background: $accent;
+    width: 100%;
+    height: 6;
+    align: center top;
+    
+}
+#search_input{
+    color: $text;
+    width: 50%;
+    max-width: 60;
+    min-width: 30;
+    align: center middle;
+    height: 3;
+    background: transparent;
+    text-style: bold;
+}
+#results_input{
+    color: $text;
+    width: 50%;
+    max-width: 60;
+    min-width: 30;
+    align: center middle;
+    height: 3;
+    background: transparent;
+    text-style: bold;
+}
+#content-tab{
+    background: transparent;
+    width: 100%;
+    align: center top;
+    min-height: 15;
+    height: 1fr;
+    margin-top: 1;
+}
+#results_table{
+    width: 100%;
+    height: 1fr;
+    overflow-y: scroll;
+    overflow-x: auto;
+    align: center top;
+    border-top: ascii $accent;
+    border-bottom: ascii $accent;
+    background: transparent;
+    padding: 1 2;
+    text-style: bold;
+}
+
+/* Estilos para la pantalla de la playlist */
+PlayList{
+    align: center middle;
+}
+#playlist_title{
+    text-align: center;
+    margin-top: 1;
+    text-style: bold;
+    color: $text;
+    padding: 1 2;
+    background: $accent;
+    margin-left: 1;
+    margin-right: 1;
+}
+#playlist-container{
+    background: transparent;
+    width: 60%;
+    height: 30;
+    align: center top;
+    border: round $accent;
+}
+#search-tab{
+    background: $accent;
+    width: 100%;
+    align: center top;
+    height: 5;
+    margin-left: 1;
+    margin-right: 1;
+}
+#playlist-tab-container{
+    background: transparent;
+    width: 100%;
+    height: 1fr;
+    align: center top;
+}
+#playlist_table{
+    width: 100%;
+    height: 80%;
+    align: center top;
+    border-top: ascii $accent;
+    border-bottom: ascii $accent;
+    background: transparent;
+    padding: 1 2;
+    text-style: bold;
+}
+#url_input{
+    width: 50%;
+    max-width: 60;
+    min-width: 30;
+    align: center middle;
+    margin: 1 0;
+    height: 3;
+    background: $accent;
+    text-style: bold;
+    border: tall $surface;
+    color: $text;
+}
+#url_input:focus{
+    border: tall $accent;
+    background: $surface;
+}
+#search_button{
+    width: 50%;
+    max-width: 40;
+    min-width: 20;
+    align: center middle;
+    margin: 1 0;
+    height: 3;
+    text-style: bold;
+    background: $surface;
+    color: $text;
+}
+#search_button:hover{
+    background:     $accent;
+    color: #1e1e2e;
+}
+#download_button{
+    width: 100%;
+    min-width: 40;
+    align: center top;
+    margin: 1 0;
+    height: 3;
+    background: $accent;
+    text-style: bold;
+    color: $text;
+}
+#download_button:hover{
+    background: $surface;
+    color: #ffffff;
+}
+
+/* Estilos para la pantalla de búsqueda por URL */
+ByUrl{
+    align: center middle;
+}
+
+#search-tab-url{
+    grid-size: 2;
+    grid-gutter: 1;
+    grid-rows: 1fr 3;
+    padding: 2;
+    width: 60;
+    height: 20;
+    border: round $accent;
+    background: transparent;
+}
+#title-by-url{
+    text-align: center;
+    color: $text;
+    text-style: bold;
+    padding: 1 2;
+}
+
+#by_url_input{
+    width: 100%;
+    max-width: 60;
+    min-width: 30;
+    align: center top;
+    margin: 1 0;
+    height: 3;
+    background: transparent;
+    text-style: bold;
+}
+#by_url_input:focus{
+    border: tall $accent;
+}
+#by_url_download_button{
+    width: 100%;
+    align: center middle;
+    margin-top: 3;
+    height: 3;
+    background: $accent;
+    text-style: bold;
+    color: $text;
+    padding: 0 2;
+}
+#by_url_download_button:hover{
+    background: $surface;
+    color: #ffffff;
+}
+
+/* Área Principal de Contenido */
+ ContentSwitcher {
+    height: 100%;
+    padding: 1 2;
+}
+
+ PlayerView, DownloaderView, HistoryView, SettingsView {
+    height: 100%;
+}
+
+Input {
+    margin: 1 0;
+}
+
+#player-controls, #dl-controls {
+    height: auto;
+    margin-bottom: 1;
+ }
+
+#player-controls Button, #dl-controls Button {
+    margin-right: 1;
+}
+
+Log {
+    height: 1fr;
+    background: $surface;
+    border: tall $background;
+}
+
+
+/* Estilos para la pantalla del reproductor */
+SplitBalancePlayer {
+       height: 100%;
+       background: transparent;
+}  
+
+   /* 1. SECCIÓN SUPERIOR: Buscador */
+#header-search {
+    height: 5;
+    padding: 0 2;
+    background: $accent;
+}
+#search-zone {
+    width: 100%;
+    height: 10;
+    background: transparent;
+    padding: 1 2;
+}
+
+#select_search_mode{
+    background: transparent;
+    width: 15%;
+    height: 3;
+    min-width: 15;
+}
+#search_input_ {
+    width: 45%;
+    min-width: 10;
+    background: transparent;
+    color: $text;
+    text-style: bold;
+    margin-top: 0;
+}
+#search_input_:focus{
+    border: tall $accent;
+    background: $surface;
+} 
+
+.section_title {
+    color: $accent;
+    text-style: bold;
+    margin-bottom: 1;
+}
+#table-search {
+    width: 40%;
+    height: 5;
+    background: transparent;
+    color: $text;
+    padding: 0 1;
+    border: none;
+    /*margin-right: 2;*/
+}
+#table-search > .datatable--cursor{
+    background: $surface;
+}
+DataTable > .datatable--header {
+background: $accent;
+color: #000000;
+text-style: bold;
+}
+
+/* 2. SECCIÓN MEDIA: Cola de Reproducción */
+    
+#mid-zone-title {
+    color: $accent;
+    text-style: bold;
+    margin-top: 1;
+    text-align: center;
+}
+#mid-zone {
+    width: 100%;
+    height: 1fr;
+    background: transparent;
+    border-top: solid $accent;
+    border-bottom: solid $accent;
+}
+#table-cola{
+    background: transparent;
+}
+
+
+
+/* 3. SECCIÓN INFERIOR: Bottom Player Bar */
+#player_bar {
+    dock: bottom;
+    height: 3;
+    background: #1e1e2e;
+    border-top: heavy $accent;
+    padding: 0 2;
+    align: center middle;
+}
+#now_playing_info {
+    width: 50%;
+    color: $accent;
+    text-style: bold;
+}
+#progress_block {
+    width: 1fr;
+    height: 1;
+    align: center middle;
+}
+ProgressBar {
+    width: 50%;
+    height: 1;
+    margin: 0 1;
+}
+ProgressBar > .possible-progress {
+    background: #ff8904;
+}
+ProgressBar > .complete {
+    background: #a6e3a1;
+}
+.time_text {
+    color: #6c7086;
+}
+#controls_mini {
+    
+    width: auto;
+    height: 1;
+    margin-left: 2;
+}
+#controls_mini Button {
+    min-width: 4;
+    height: 2;
+    margin: 0 0;
+    background: transparent;
+    border: none;
+    color: $surface;
+    text-style: bold;
+    background: $accent;
+}
+#controls_mini Button:hover {
+    color: #a6e3a1;
+}
+#vol_badge {
+    width: 10;
+    text-align: right;
+    color: #7f849c;
+    margin-left: 1;
+}
+
+/*BOX COLAAAAAAAA*/
+SaveCola{
+    background: transparent;
+    align: center middle;
+}
+#save-cola-box{
+    grid-size: 2;
+    grid-gutter: 1;
+    grid-rows: 1fr 3;
+    padding: 2;
+    width: 60;
+    height: 20;
+    border: round $accent;
+    background: transparent;
+}
+
+#title-save-cola{
+    text-align: center;
+    text-style: bold;
+    color: $accent;
+    padding: 1 2;
+}
+
+#name-cola{
+    width: 100%;
+    color: $text;
+    text-style: bold;
+}
+
+#btn-save-cola{
+    width: 100%;
+    background: $accent;
+}
+#btn-save-cola:hover{
+    background: $surface;
+    color: $text;
+}
+
+
+
+
+
+/*----------------------------Messagebox-----------------*/
+Msg{
+    align: center middle;
+}
+
+#msgBox{
+    grid-size: 2;
+    grid-gutter: 1;
+    grid-rows: 1fr 3;
+    padding: 2;
+    width: 40;
+    height: 15;
+    border: round $accent;
+    background: transparent;
+}
+
+#mensaje-valid{
+    color: $accent;
+    text-align: center;
+    text-style: bold;
+    padding: 1;
+}
+#ok{
+    background: transparent;
+    color: #ffffff;
+    text-style: bold;
+    border: round $accent;
+    margin-left: 8;
+}
+#ok:hover{
+    background: greenyellow;
+    content-align: center middle;
+    color: #000000;
+    border: round greenyellow;
+}
+
+#not{
+    background: transparent;
+    color: #ffffff;
+    text-style: bold;
+    border: round $accent;
+    margin-left: 8;
+}
+#not:hover{
+    background: red;
+    color: #000000;
+    content-align: center middle;
+    border: round red;
+}

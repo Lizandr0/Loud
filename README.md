@@ -1,0 +1,92 @@
+# LOUD TUI
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/TU_USUARIO/loud-tui/main/screenshots/demo.jpg" alt="LOUD TUI Showcase" width="850">
+</p>
+
+<p align="center">
+  <b>Un reproductor de música TUI ligero, rápido y moderno para la terminal.</b><br>
+  Construido con Python + Textual y alimentado por el motor multimedia de mpv.
+</p>
+
+<p align="center">
+  <a href="#-características"><img src="https://img.shields.io/badge/Interfaz-Textual_TUI-purple.svg" alt="Textual"></a>
+  <a href="#-requisitos-previos"><img src="https://img.shields.io/badge/Motor-mpv-red.svg" alt="mpv"></a>
+  <a href="#-licencia"><img src="https://img.shields.io/badge/Licencia-MIT-green.svg" alt="License"></a>
+</p>
+
+---
+
+## 📸 Vista Previa
+
+**LOUD** combina la potencia de la reproducción de audio en segundo plano con una interfaz de usuario (*Terminal User Interface*) responsiva, elegante y basada en la paleta de colores de tu sistema. 
+
+Gestiona tanto tu **biblioteca local de música** como búsquedas y streaming directo desde la misma cola de reproducción.
+
+---
+
+## ✨ Características
+
+* 📁 **Explorador de Música Local:** Navegación por directorios (`~/Música`) e inserción rápida de canciones a la cola de reproducción.
+* 🔍 **Búsqueda y Streaming Integrado:** Busca e integra canciones remotas directamente en la misma lista sin interrumpir la reproducción.
+* ⚡ **Reproducción Ultra Ligera (mpv):** Utiliza un socket IPC en segundo plano con `mpv`, garantizando un consumo mínimo de CPU y RAM.
+* 🎨 **Temas Dinámicos:** Compatible nativamente con la paleta de colores de Textual y la paleta de temas nativa (`Ctrl + p`).
+* ⌨️ **Controles por Teclado:** Atajos intuitivos diseñados para operar sin tocar el ratón.
+* 📋 **Cola de Reproducción Unificada:** Soporta simultáneamente URLs de streaming y rutas absolutas locales sin errores de tipo.
+
+---
+
+## 🛠️ Requisitos Previos
+
+# Antes de instalar LOUD, asegúrate de tener instalados **Python 3.10+** y el reproductor **mpv**.
+
+## En distribuciones basadas en **Debian / Ubuntu / Linux Mint**:
+```bash
+sudo apt update
+sudo apt install -y python3 python3-pip python3-venv mpv
+```
+# Instalación paso a paso:
+## 1. Clonar el repositorio
+```bash
+git clone [https://github.com/TU_USUARIO/loud-tui.git](https://github.com/TU_USUARIO/loud-tui.git)
+cd loud-tui
+```
+
+## 2. Crear y activar el entorno virtual
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+## 3. Instalar dependencias
+```bash
+pip install -r requirements.txt
+```
+
+# Uso Rápido:
+## Con el entorno virtual activado, ejecuta:
+```bash
+python3 main.py
+```
+
+# Lanzar LOUD desde cualquier lugar (Modo Alias Bash)
+## 1.Abre tu .bashrc con tu editor preferido:
+```bash
+nano ~/.bashrc
+```
+## 2.Añade la siguiente línea al final del archivo (asegúrate de cambiar /ruta/a/tu/loud-tui por la ruta absoluta donde clonaste el proyecto):
+```bash
+alias loud='source /ruta/a/tu/loud-tui/venv/bin/activate && python /ruta/a/tu/loud-tui/main.py && deactivate'
+```
+
+## 3.Actualiza tu terminal para aplicar los cambios:
+```bash
+source ~/.bashrc
+```
+
+# ¡Listo! Ahora simplemente escribe loud en cualquier terminal y la aplicación se abrirá al instante.
+
+## Atajos de Teclado (Keybindings)
+### Ejecuta ctrl+p/keys y te mostrara todos los comandos haciendo click encima de la zona que deseas usar.
+## Temas nativos de Textual
+### Ejecuta ctrl+p/theme pruebalos todos.
