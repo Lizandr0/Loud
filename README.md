@@ -1,7 +1,7 @@
 # LOUD TUI
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/TU_USUARIO/loud-tui/main/screenshots/demo.jpg" alt="LOUD TUI Showcase" width="850">
+  <img src="screenshots/loud___.png" alt="LOUD TUI Showcase" width="850">
 </p>
 
 <p align="center">
