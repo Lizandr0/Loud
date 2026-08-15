@@ -4,30 +4,64 @@ import os
 import subprocess
 
 class YtRepository:
+    
+
     def get_playlist(self, url):
         try:
             opciones_descarga = {
                 'quiet': True,
-                'no_progress':True,
-                'extract_flat': True
+                'no_progress': True,
+                'extract_flat': True,
+                'skip_download': True,
+                'ignoreerrors': True,  # Si una canción privada o borrada falla en la lista, no rompe todo el flujo
+                'extractor_args': {
+                    'youtube': {
+                        'player_client': ['android', 'ios']  # Evita bloqueos de Vevo / Throttle de YouTube
+                    }
+                }
             }
             with YoutubeDL(opciones_descarga) as ydl:
                 info = ydl.extract_info(url, download=False)
+                
+                if not info:
+                    return []
+
                 if 'entries' in info:
-                    return [{
-                        'title': e.get('title'),
-                        'url': f"https://www.youtube.com/watch?v={e.get('id')}",
-                        'duration': e.get('duration') if e.get('duration') is not None else "N/A"
-                    } for e in info['entries']]
+                    canciones = []
+                    for e in info['entries']:
+                        if e and e.get('id'):
+                            duracion_sec = e.get('duration')
+                            if duracion_sec is not None:
+                                mins, secs = divmod(int(duracion_sec), 60)
+                                duracion_str = f"{mins:02d}:{secs:02d}"
+                            else:
+                                duracion_str = "--:--"
+
+                            canciones.append({
+                                'title': e.get('title', 'Sin título'),
+                                'url': f"https://www.youtube.com/watch?v={e.get('id')}",
+                                'duration': duracion_str
+                            })
+                    return canciones
                 else:
+                    # Si le pasaron una URL de una sola canción en vez de playlist
+                    duracion_sec = info.get('duration')
+                    if duracion_sec is not None:
+                        mins, secs = divmod(int(duracion_sec), 60)
+                        duracion_str = f"{mins:02d}:{secs:02d}"
+                    else:
+                        duracion_str = "--:--"
+
                     return [{
-                        'title': info.get('title'),
-                        'url': f"https://www.youtube.com/watch?v={info.get('id')}"
+                        'title': info.get('title', 'Sin título'),
+                        'url': f"https://www.youtube.com/watch?v={info.get('id')}",
+                        'duration': duracion_str
                     }]
+
         except yt_dlp.utils.DownloadError as e:
             print(f"Error de descarga o de conexion: {e}")
             return []
-        
+            
     def descargar_playlist(self, url):
         try:
             try:

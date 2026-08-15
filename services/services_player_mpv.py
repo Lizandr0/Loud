@@ -4,6 +4,7 @@ import socket
 import subprocess
 import os
 from pathlib import Path
+import yt_dlp
 
 class MPVPlayer:
     def __init__(self, ipc_socket: str = "/tmp/loud_mpv.sock"):
@@ -18,11 +19,42 @@ class MPVPlayer:
             "mpv",
             "--no-video",
             f"--input-ipc-server={self.ipc_socket}",
-            "--idle",  
+            "--idle",
+            "--ytdl-format=bestaudio/best",
+            "--network-timeout=15",
+            "--stream-lavf-o=reconnect=1,reconnect_at_eof=1,reconnect_streamed=1",
+            "--demuxer-max-bytes=10M",
         ]
         self.process = subprocess.Popen(
             cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
         )
+
+    def obtener_stream_audio(self, url_youtube: str) -> str:
+        opciones = {
+            'format': 'bestaudio/best',
+            'quiet': True,
+            'no_warnings': True,
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['android', 'ios']
+                }
+            }
+        }
+        with yt_dlp.YoutubeDL(opciones) as ydl:
+            info = ydl.extract_info(url_youtube, download=False)
+            return info.get('url', url_youtube)
+
+    def play(self, target: str) -> None:
+        if target.startswith("http"):
+            try:
+                ruta_o_url = self.obtener_stream_audio(target)
+            except Exception as e:
+                print(f"Error al resolver el audio de {target}: {e}")
+                return
+        else:
+            ruta_o_url = str(Path(target).expanduser().resolve())
+
+        self.send_command(["loadfile", ruta_o_url, "replace"])
 
     def send_keep_alive(self):
         comando = ["loadfile", "avsynth://test_src=sine:frequency=10:duration=1", "append-play"]

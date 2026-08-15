@@ -120,6 +120,7 @@ class PlayerView(Vertical):
     #acciones - BINDINGS
     def action_next(self)->None:
         self.play_next_song()
+        
     def action_prev(self)->None:
         self.play_prev_song()
 
@@ -243,13 +244,21 @@ class PlayerView(Vertical):
             self.notify(f"Buscando canciones en: {query}")
             if self.search_playlist(query):
                 self.notify("Ya Puedes guardar la playlist!", title='LOUD')
+            else:
+                return
 
     def search_playlist(self, url):
         songs=self.service.buscar_playlist(url)
+        queue_table = self.query_one("#table-cola", DataTable)
+
+        if songs is None:
+            self.notify("No se encontraron canciones!", title='LOUD', severity='error')
+            self.query_one("#search_input_", Input).clear()
+            return
+            
         if songs:
             self.app.queue.clear()
             self.action_delete_cola()
-            queue_table = self.query_one("#table-cola", DataTable)
             for song in songs:
                 self.app.queue.append(song)
                 unique_key = f"{uuid.uuid4().hex[:6]}_{song['url']}"
@@ -257,7 +266,7 @@ class PlayerView(Vertical):
             self.notify(f'Playlist encontrada, se cargaron {len(songs)} canciones a la cola!', title='LOUD')
             self.query_one("#search_input_", Input).clear()
         else:
-            self.notify("No se encontraron canciones!", title='LOUD', severity='warning')
+            self.notify(f"No se encontraron canciones en {url}!", title='LOUD', severity='warning')
             self.query_one("#search_input_", Input).clear()
 
     def update_playback_progress(self) -> None:
@@ -344,7 +353,12 @@ class PlayerView(Vertical):
             self.current_index += 1
             next_song = self.queue[self.current_index]
 
-            self.player.send_command(["loadfile", next_song["url"]])
+            # 1. Le avisamos a la clase del reproductor que ignore el próximo 'end-file'
+            # (ya que la interrupción fue provocada a propósito por la App)
+            self.player.ignorar_siguiente_eof = True
+
+            # 2. Reemplazamos la canción en mpv especificando "replace"
+            self.player.send_command(["loadfile", next_song["url"], "replace"])
             self.is_playing = True
 
             self.update_queue_ui()
