@@ -1,7 +1,7 @@
 # LOUD TUI
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/TU_USUARIO/loud-tui/main/screenshots/demo.jpg" alt="LOUD TUI Showcase" width="850">
+  <img src="screenshots/loud___.png" alt="LOUD TUI Showcase" width="850">
 </p>
 
 <p align="center">
@@ -48,7 +48,7 @@ sudo apt install -y python3 python3-pip python3-venv mpv
 # Instalación paso a paso:
 ## 1. Clonar el repositorio
 ```bash
-git clone [https://github.com/TU_USUARIO/loud-tui.git](https://github.com/TU_USUARIO/loud-tui.git)
+git clone https://github.com/Lizandr0/loud.git
 cd loud-tui
 ```
 
