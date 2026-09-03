@@ -1,7 +1,7 @@
 # LOUD TUI
 
 <p align="center">
-  <img src="screenshots/loud___.png" alt="LOUD TUI Showcase" width="850">
+  <img src="screenshots/loud___.svg" alt="LOUD TUI Showcase" width="850">
 </p>
 
 <p align="center">
