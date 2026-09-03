@@ -4,8 +4,6 @@ import os
 import subprocess
 
 class YtRepository:
-    
-
     def get_playlist(self, url):
         try:
             opciones_descarga = {
@@ -13,10 +11,10 @@ class YtRepository:
                 'no_progress': True,
                 'extract_flat': True,
                 'skip_download': True,
-                'ignoreerrors': True,  # Si una canción privada o borrada falla en la lista, no rompe todo el flujo
+                'ignoreerrors': True,
                 'extractor_args': {
                     'youtube': {
-                        'player_client': ['android', 'ios']  # Evita bloqueos de Vevo / Throttle de YouTube
+                        'player_client': ['android', 'ios']
                     }
                 }
             }
@@ -44,7 +42,6 @@ class YtRepository:
                             })
                     return canciones
                 else:
-                    # Si le pasaron una URL de una sola canción en vez de playlist
                     duracion_sec = info.get('duration')
                     if duracion_sec is not None:
                         mins, secs = divmod(int(duracion_sec), 60)
@@ -135,14 +132,14 @@ class YtRepository:
             os.makedirs(ruta_base, exist_ok=True)
             
             ruta_salida = os.path.join(ruta_base, '%(title)s.%(ext)s')
-
+            COOKIES_PATH=os.path.expanduser("~/.config/loud/cookies.txt")
             opciones_descarga = {
                 'format': 'bestaudio/best',
                 'quiet': True,
                 'no_warnings': True,
                 'no_progress': True,
                 'writethumbnail': True,
-                'cookiefile': 'cookies.txt',
+                'cookiefile': COOKIES_PATH,
                 'ignoreerrors': False, 
                 'socket_timeout': 15,
                 'retries': 3,
@@ -260,4 +257,3 @@ class YtRepository:
             except OSError as e:
                 print(f"Error de conexion: {e}")
                 return []
-    

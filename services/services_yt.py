@@ -4,7 +4,7 @@ class SearchService:
 
     def __init__(self):
         self.repo = YtRepository()
-
+        
     def buscar_playlist(self, url):
         resultado = self.repo.get_playlist(url)
         if not resultado:

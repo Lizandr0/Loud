@@ -6,6 +6,10 @@ import os
 from pathlib import Path
 import yt_dlp
 
+USER_DATA = os.path.expanduser("~/.local/share/loud")
+COOKIE_PATH = os.path.join(USER_DATA, "cookies.txt")
+YTDLP_BIN = "/usr/share/loud/venv/bin/yt-dlp"
+
 class MPVPlayer:
     def __init__(self, ipc_socket: str = "/tmp/loud_mpv.sock"):
         self.ipc_socket = ipc_socket
@@ -20,10 +24,13 @@ class MPVPlayer:
             "--no-video",
             f"--input-ipc-server={self.ipc_socket}",
             "--idle",
-            "--ytdl-format=bestaudio/best",
+            "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
             "--network-timeout=15",
             "--stream-lavf-o=reconnect=1,reconnect_at_eof=1,reconnect_streamed=1",
             "--demuxer-max-bytes=10M",
+            f"--cookies-file={COOKIE_PATH}",
+            f"--script-opts=ytdl_hook-ytdl_path={YTDLP_BIN}",
+            f"--ytdl-raw-options=cookies={COOKIE_PATH},js-runtimes=node,remote-components=ejs:github"
         ]
         self.process = subprocess.Popen(
             cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
@@ -31,26 +38,30 @@ class MPVPlayer:
 
     def obtener_stream_audio(self, url_youtube: str) -> str:
         opciones = {
-            'format': 'bestaudio/best',
+            'format': 'ba/b',
             'quiet': True,
             'no_warnings': True,
+            'default_search': 'ytsearch',
+            'noplaylist': True,
+            'cookiefile': COOKIE_PATH,
+            'js_runtimes': ['node'],
+            'remote_components': ['ejs:github'],
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android', 'ios']
+                    'player_client': ['android_vr', 'ios', 'mweb']
                 }
-            }
+            }   
         }
         with yt_dlp.YoutubeDL(opciones) as ydl:
             info = ydl.extract_info(url_youtube, download=False)
+
+            if 'entries' in info and len(info['entries']) > 0:
+                info = info['entries'][0]
             return info.get('url', url_youtube)
 
     def play(self, target: str) -> None:
-        if target.startswith("http"):
-            try:
-                ruta_o_url = self.obtener_stream_audio(target)
-            except Exception as e:
-                print(f"Error al resolver el audio de {target}: {e}")
-                return
+        if target.startswith("http") or target.startswith("ytsearch"):
+            ruta_o_url = target
         else:
             ruta_o_url = str(Path(target).expanduser().resolve())
 
@@ -79,17 +90,11 @@ class MPVPlayer:
         except Exception as e:
             print(f"Error al enviar comando a mpv: {e}")
 
-    def play(self, target: str) -> None:
-
-        ruta_o_url = str(Path(target).expanduser().resolve()) if not target.startswith("http") else target
-        self.send_command(["loadfile", ruta_o_url, "replace"])
-
     def play_stream(self, url: str) -> None:
         self.play(url)
 
     def play_local(self, file_path: str) -> None:
         self.play(file_path)
-
 
     def toggle_pause(self) -> None:
         self.send_command(["cycle", "pause"])

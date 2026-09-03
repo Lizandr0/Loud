@@ -1,8 +1,7 @@
 from pathlib import Path
 from textual.app import ComposeResult
-from textual.widgets import OptionList, Static
+from textual.widgets import OptionList
 from textual.widgets.option_list import Option
-from textual.containers import Vertical
 from textual.widget import Widget
 import uuid
 import subprocess

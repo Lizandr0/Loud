@@ -1,5 +1,5 @@
-from textual.widgets import Input, Static, Header, Footer, DataTable
-from textual.app import ComposeResult, App
+from textual.widgets import Input, Static, Footer, DataTable
+from textual.app import ComposeResult
 from textual.containers import Vertical,VerticalScroll, Horizontal
 
 from services.services_yt import SearchService

@@ -2,10 +2,8 @@ from textual.app import App, ComposeResult
 from textual.containers import Vertical
 from textual.widgets import (
     Header,
-    Footer,
     OptionList,
-    ContentSwitcher,
-    DataTable
+    ContentSwitcher
 )
 from ui_t.ui_player import PlayerView
 from ui_t.ui_downloader import DownloaderView
@@ -19,7 +17,6 @@ class LoudApp(App):
 
         variables_css = self.app.get_css_variables()
         self.color_accent = variables_css.get("accent", "green")
-        
     CSS_PATH = "../ui_t/styles.tcss"
     def compose(self) -> ComposeResult:
         yield Header()

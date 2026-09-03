@@ -13,10 +13,10 @@ from textual.widgets import (
 import uuid
 import asyncio
 
-from services.services_yt import SearchService as YTService
 from services.services_player_mpv import MPVPlayer
-from services.services_sqlite import guardar_cola, obtener_canciones, actualizar_playist
+from services.services_sqlite import sqliteService
 from services.services_yt import SearchService
+from services.services_spotify import SearchSpotify
 from textual import work
 class SplitBalancePlayer(Vertical):
     def compose(self) -> ComposeResult:
@@ -26,7 +26,8 @@ class SplitBalancePlayer(Vertical):
                 yield Select(
                     options=[
                         ("Canción", "song"),
-                        ("Playlist YT", "yt_playlist")
+                        ("Playlist YT", "yt_playlist"),
+                        ("Playlist Spotify", "spotify_playlist")
                     ],
                     value="song",
                     id="select_search_mode",
@@ -34,11 +35,11 @@ class SplitBalancePlayer(Vertical):
                 )
                 
                 yield Input(
-                        placeholder="Buscar canción para añadir a la cola...",
+                        placeholder="¿Que quieres escuchar?",
                         id="search_input_",
                     )
-            
-                yield DataTable(id="table-search")
+        with Vertical(id='content-tab-search'):
+            yield DataTable(id="table-search")
 
         yield Label("Cola de Reproducción", id="mid-zone-title")
         with VerticalScroll(id="mid-zone"):
@@ -79,6 +80,8 @@ class PlayerView(Vertical):
         self.is_playing = False
 
         self.service=SearchService()
+        self.ServiceSpotify=SearchSpotify()
+        self.queries=sqliteService()
     
 
     def compose(self) -> ComposeResult:
@@ -100,8 +103,7 @@ class PlayerView(Vertical):
         tabla_search=self.query_one("#table-search", DataTable)
         tabla_search.zebra_stripes=False
         tabla_search.cursor_type="row"
-        tabla_search.add_columns("Resultado de la busqueda:", " ", "   ")
-        self.actualizar_tabla_busqueda(tabla_search, [])
+        tabla_search.add_columns("", "", "")
 
         tabla_cola=self.query_one("#table-cola", DataTable)
         tabla_cola.zebra_stripes=True
@@ -114,8 +116,8 @@ class PlayerView(Vertical):
         self.player.quit()
 
     def _on_show(self)-> None:
-        tabla=self.query_one("#table-search", DataTable)
-        self.actualizar_tabla_busqueda(tabla, [])
+        """tabla=self.query_one("#table-search", DataTable)
+        self.actualizar_tabla_busqueda(tabla, [])"""
 
     #acciones - BINDINGS
     def action_next(self)->None:
@@ -139,7 +141,7 @@ class PlayerView(Vertical):
         validar=await self.app.push_screen_wait(Msg(f'Guardar cambios en la Playlist {self.app.id_playlist}'))
         if validar:
             try:
-                actualizar_playist(self.app.id_playlist, self.queue)
+                self.queries.actualizar_playist(self.app.id_playlist, self.queue)
                 self.notify(f"La Playlist: {self.app.id_playlist} fue actualizada!", title="LOUD", severity='information')
             except Exception as e:
                 self.notify(f"Error al actualizar, {e}", title='LOUD', severity='error')
@@ -188,7 +190,7 @@ class PlayerView(Vertical):
             self.notify("¡La lista está vacía!", severity="warning", title='LOUD')
             return
         try:
-            guardar_cola(playlist_name, self.queue)
+            self.queries.guardar_cola(playlist_name, self.queue)
             self.notify(f"Playlist '{playlist_name}' guardada con éxito", title="LOUD", severity='information')
             sidebar = self.app.query_one("#sidebar")
             sidebar.actualizar_tabla_playlists()
@@ -219,6 +221,19 @@ class PlayerView(Vertical):
         elif button_id=="btn_prev":
             self.notify('Reproduciendo la cancion anterior...')
             self.play_prev_song()
+            
+    def buscar_cancion(self, query):
+        resultados = self.service.buscar_canciones_stream(query)
+        if resultados:
+            tabla=self.query_one("#table-search", DataTable)
+            self.actualizar_tabla_busqueda(tabla, resultados)
+            self.notify(f"Resultados para {query} encontrados!", title="LOUD", severity='information')
+            self.query_one("#search_input_", Input).clear()
+            tabla.styles.display = "block"
+        else:
+            self.notify(f"No se encontraron resultados para {query}", title='LOUD', severity='warning')
+            self.query_one("#search_input_", Input).clear()
+            tabla.styles.display = "none"
 
     @work(thread=True)
     def on_input_submitted(self, event: Input.Submitted) -> None:
@@ -227,27 +242,48 @@ class PlayerView(Vertical):
             self.notify("Por favor, ingresa un término de búsqueda o una URL.", title='LOUD', severity='error')
             return
         modo=self.query_one('#select_search_mode', Select).value
+        
         if modo =='song':
             self.notify(f"Buscando {query}...", title='LOUD')
-            service = YTService()
-            resultados = service.buscar_canciones_stream(query)
-            if resultados:
-                tabla=self.query_one("#table-search", DataTable)
-                self.actualizar_tabla_busqueda(tabla, resultados)
-                self.notify(f"Resultados para {query} encontrados!", title="LOUD", severity='information')
-                self.query_one("#search_input_", Input).clear()
-            else:
-                self.notify(f"No se encontraron resultados para {query}", title='LOUD', severity='warning')
-                self.query_one("#search_input_", Input).clear()
+            try:
+                self.buscar_cancion(query)
+            except Exception as e:
+                self.notify(f"Error {e}", title='LOUD', severity='error')
 
         elif modo == 'yt_playlist':
             self.notify(f"Buscando canciones en: {query}")
-            if self.search_playlist(query):
+            try:
+                self.search_playlist_yt(query)
                 self.notify("Ya Puedes guardar la playlist!", title='LOUD')
-            else:
-                return
+            except Exception as e:
+                self.notify(f"Error {e}", title='LOUD', severity='error')
+            
+        elif modo == "spotify_playlist":
+            self.notify(f"Buscando Playlist de Spotify: {query}", title="LOUD")
+            try:
+                self.search_playlist_spotify(query)
+                self.notify("Ya Puedes guardar la playlist!", title='LOUD')
+            except Exception as e:
+                self.notify(f"Error {e}", title='LOUD', severity='error')
+            
 
-    def search_playlist(self, url):
+    def search_playlist_spotify(self, query):
+        queue_table = self.query_one("#table-cola", DataTable)
+        spotify_songs=self.ServiceSpotify.buscar_canciones_spotify(query)
+        if spotify_songs:
+            self.app.queue.clear()
+            self.action_delete_cola()
+            for song_s in spotify_songs:
+                self.app.queue.append(song_s)
+                unique_key = f"{uuid.uuid4().hex[:6]}_{song_s['url']}"
+                queue_table.add_row(song_s['title'], f"{song_s['source']}", song_s['url'], key=unique_key)
+            self.notify(f'Playlist encontrada, se cargaron {len(spotify_songs)} canciones a la cola!', title='LOUD')
+            self.query_one("#search_input_", Input).clear()
+        else:
+            self.notify(f"No se encontraron resultados para {query}", title='LOUD', severity='warning')
+            self.query_one("#search_input_", Input).clear()
+
+    def search_playlist_yt(self, url):
         songs=self.service.buscar_playlist(url)
         queue_table = self.query_one("#table-cola", DataTable)
 
@@ -298,6 +334,8 @@ class PlayerView(Vertical):
             queue_table.add_row(title, duration, url, key=unique_key)
     
             self.notify(f"Añadido a la cola: {title}", title="LOUD")
+            tabla_busqueda=self.query_one("#table-search", DataTable).clear()
+            tabla_busqueda.styles.display="none"
     
             if not self.is_playing:
                 self.play_next_song()
@@ -307,12 +345,13 @@ class PlayerView(Vertical):
             song = self.app.queue[self.current_index]
     
             self.player.play_stream(song["url"])
+            self.notify(f"repruduciendo: {song['url']}")
             self.reproduciendo_cancion(song["title"])
             self.is_playing = True
 
-    #otras fucniones alv
+    #otras funciones alv
     def cargar_playlist_a_cola(self, playlist_id: int) -> None:
-        canciones = obtener_canciones(playlist_id)
+        canciones = self.queries.obtener_canciones(playlist_id)
         if not canciones:
             self.notify(
                 "La playlist está vacía o no se pudo leer", severity="warning", title='LOUD'
@@ -352,12 +391,8 @@ class PlayerView(Vertical):
         if self.current_index + 1 < len(self.queue):
             self.current_index += 1
             next_song = self.queue[self.current_index]
-
-            # 1. Le avisamos a la clase del reproductor que ignore el próximo 'end-file'
-            # (ya que la interrupción fue provocada a propósito por la App)
             self.player.ignorar_siguiente_eof = True
 
-            # 2. Reemplazamos la canción en mpv especificando "replace"
             self.player.send_command(["loadfile", next_song["url"], "replace"])
             self.is_playing = True
 

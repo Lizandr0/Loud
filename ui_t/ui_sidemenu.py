@@ -4,7 +4,7 @@ from textual.containers import Vertical
 from textual.app import ComposeResult
 import uuid
 from textual import work
-from services.services_sqlite import obtener_playlist, eliminar_playlist
+from services.services_sqlite import sqliteService
 from ui_t.ui_local_music import LocalMusicView
 class Sidebar(Vertical):
 
@@ -26,7 +26,9 @@ class Sidebar(Vertical):
             yield Static('Música Local', id='title-local-music')
             yield  LocalMusicView()
         
-        
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.queries=sqliteService()
     @work
     async def action_delete_playlist(self)->None:
         from ui_t.ui_messagebox import Msg
@@ -44,7 +46,7 @@ class Sidebar(Vertical):
             if row_key_str.startswith("pl_"):
                 playlist_id = int(row_key_str.replace("pl_", ""))
 
-                eliminar_playlist(playlist_id)
+                self.queries.eliminar_playlist(playlist_id)
 
                 tabla.remove_row(row_key)
 
@@ -57,7 +59,7 @@ class Sidebar(Vertical):
         
     def actualizar_tabla_playlists(self):
         tabla=self.query_one("#table-playlists", DataTable)
-        info=obtener_playlist()
+        info=self.queries.obtener_playlist()
         tabla.clear()
         if info:
             for i in info:

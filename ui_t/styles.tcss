@@ -1,9 +1,8 @@
 DataTable > .datatable--cursor {
-    background: $accent;
     color: $text;
     text-style: bold;
 }
-/* 1. Estilos del Menú Lateral (Sidebar) */
+/* ---------------Estilos del Menú Lateral (Sidebar)---------------------- */
 Sidebar {
     dock: left;
     width: 23;
@@ -12,7 +11,7 @@ Sidebar {
     border-right: ascii $accent;
 }
 
-/* menu lateral */
+/* -------------------------------menu lateral------------------------------- */
 
 #sidebar-title {
     padding: 1 5;
@@ -30,7 +29,7 @@ Sidebar {
     text-style: bold;
 }
 
-/*playlists*/
+/*----------------------------playlists (urls guardadas)--------------------*/
 
 #table-playlists{
     background: transparent;
@@ -39,7 +38,7 @@ Sidebar {
     height: 1fr;
 }
 
-/*musica local styles*/
+/*-------------------------------usica local styles--------------------------*/
 
 #container-local-music{
     border: ascii $accent;
@@ -57,6 +56,7 @@ Sidebar {
     text-wrap: nowrap;
     overflow-x: hidden;
 }
+
 /* Opción cuando se pasa el cursor por encima */
 #menu_list > .option-list--option-hover {
     background: #313244;
@@ -71,7 +71,7 @@ Sidebar {
 }
 
 
-/*pantalla downloader*/
+/*-------------------------------pantalla downloader---------------------------------*/
 
 #title-downloader{
     text-align: center;
@@ -134,7 +134,7 @@ Sidebar {
     text-style: bold;
 }
 
-/* Estilos para la pantalla de la playlist */
+/* ------------------------------Estilos pantalla playlist-download ----------------------------*/
 PlayList{
     align: center middle;
 }
@@ -203,7 +203,7 @@ PlayList{
     margin: 1 0;
     height: 3;
     text-style: bold;
-    background: $surface;
+    background: $boost;
     color: $text;
 }
 #search_button:hover{
@@ -216,7 +216,7 @@ PlayList{
     align: center top;
     margin: 1 0;
     height: 3;
-    background: $accent;
+    background: $boost;
     text-style: bold;
     color: $text;
 }
@@ -225,7 +225,7 @@ PlayList{
     color: #ffffff;
 }
 
-/* Estilos para la pantalla de búsqueda por URL */
+/* -------------------------Estilos para la pantalla de búsqueda por URL-------------------------- */
 ByUrl{
     align: center middle;
 }
@@ -275,43 +275,13 @@ ByUrl{
     color: #ffffff;
 }
 
-/* Área Principal de Contenido */
- ContentSwitcher {
-    height: 100%;
-    padding: 1 2;
-}
-
- PlayerView, DownloaderView, HistoryView, SettingsView {
-    height: 100%;
-}
-
-Input {
-    margin: 1 0;
-}
-
-#player-controls, #dl-controls {
-    height: auto;
-    margin-bottom: 1;
- }
-
-#player-controls Button, #dl-controls Button {
-    margin-right: 1;
-}
-
-Log {
-    height: 1fr;
-    background: $surface;
-    border: tall $background;
-}
-
-
-/* Estilos para la pantalla del reproductor */
+/*---------------- Estilos para la pantalla del reproductor ------------------*/
 SplitBalancePlayer {
        height: 100%;
        background: transparent;
 }  
 
-   /* 1. SECCIÓN SUPERIOR: Buscador */
+   /* SECCIÓN SUPERIOR: Buscador */
 #header-search {
     height: 5;
     padding: 0 2;
@@ -329,9 +299,10 @@ SplitBalancePlayer {
     width: 15%;
     height: 3;
     min-width: 15;
+    border: none;
 }
 #search_input_ {
-    width: 45%;
+    width: 85%;
     min-width: 10;
     background: transparent;
     color: $text;
@@ -348,25 +319,33 @@ SplitBalancePlayer {
     text-style: bold;
     margin-bottom: 1;
 }
+
+#content-tab-search{
+    background: transparent;
+    width: 100%;
+    height: auto;
+    align: center top;
+}
 #table-search {
-    width: 40%;
-    height: 5;
+    width: 100%;
     background: transparent;
     color: $text;
     padding: 0 1;
-    border: none;
-    /*margin-right: 2;*/
+    margin-top: 1;
+    max-width: 150;
+    height: auto;
 }
 #table-search > .datatable--cursor{
-    background: $surface;
+    background: #000000;
+    color: #ffffff;
 }
 DataTable > .datatable--header {
-background: $accent;
-color: #000000;
+background: transparent;
+color: $text;
 text-style: bold;
 }
 
-/* 2. SECCIÓN MEDIA: Cola de Reproducción */
+/* SECCIÓN MEDIA: Cola de Reproducción */
     
 #mid-zone-title {
     color: $accent;
@@ -387,11 +366,11 @@ text-style: bold;
 
 
 
-/* 3. SECCIÓN INFERIOR: Bottom Player Bar */
+/* SECCIÓN INFERIOR: Bottom Player Bar */
 #player_bar {
     dock: bottom;
     height: 3;
-    background: #1e1e2e;
+    background: transparent;
     border-top: heavy $accent;
     padding: 0 2;
     align: center middle;
@@ -446,7 +425,7 @@ ProgressBar > .complete {
     margin-left: 1;
 }
 
-/*BOX COLAAAAAAAA*/
+/*----------------------------BOX COLAAAAAAAA---------------------*/
 SaveCola{
     background: transparent;
     align: center middle;
@@ -478,15 +457,12 @@ SaveCola{
 #btn-save-cola{
     width: 100%;
     background: $accent;
+    margin-top: 1;
 }
 #btn-save-cola:hover{
     background: $surface;
     color: $text;
 }
-
-
-
-
 
 /*----------------------------Messagebox-----------------*/
 Msg{

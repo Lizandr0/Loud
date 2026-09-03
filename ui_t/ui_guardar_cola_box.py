@@ -1,4 +1,4 @@
-from textual.widgets import Input, Static, Header, Footer, Button
+from textual.widgets import Input, Static, Footer, Button
 from textual.app import ComposeResult
 from textual.containers import Vertical
 from textual.screen import ModalScreen
