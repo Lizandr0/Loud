@@ -50,7 +50,7 @@ sudo apt install -y python3 python3-pip python3-venv mpv
 ### Descarga el .deb e instala:
 
 ``` bash
-sudo apt install loud.deb
+sudo apt install ./loud-1.0.0_amd64.deb
 ```
 #### Una vez instalado solo ejecuta:
 ``` bash
