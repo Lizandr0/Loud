@@ -57,6 +57,7 @@ sudo apt install loud.deb
 loud
 ```
 ### Tambien puedes clonar el proyecto y hacerlo a tu modo:
+
 ### 1. Clonar el repositorio
 ```bash
 git clone https://github.com/Lizandr0/loud.git
@@ -72,6 +73,12 @@ source venv/bin/activate
 ### 3. Instalar dependencias
 ```bash
 pip install -r requirements.txt
+```
+
+### Descarga las cookies de yt desde el navegador que uses puedes usar la extencion `Get cookies.txt` o usa las cookies.txt de la raiz del proyecto y muevelos a `~/.config/loud/`(`~/.config/loud/cookies.txt`)
+#### Dale permisos de ejecucion
+``` bash
+chmod +x cookies.txt
 ```
 
 # Uso Rápido:
