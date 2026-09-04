@@ -3,6 +3,8 @@ import yt_dlp
 import os
 import subprocess
 
+from config import COOKIES_PATH, YTDLP_BIN
+
 class YtRepository:
     def get_playlist(self, url):
         try:
@@ -132,7 +134,6 @@ class YtRepository:
             os.makedirs(ruta_base, exist_ok=True)
             
             ruta_salida = os.path.join(ruta_base, '%(title)s.%(ext)s')
-            COOKIES_PATH=os.path.expanduser("~/.config/loud/cookies.txt")
             opciones_descarga = {
                 'format': 'bestaudio/best',
                 'quiet': True,

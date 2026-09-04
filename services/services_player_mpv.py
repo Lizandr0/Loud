@@ -6,9 +6,7 @@ import os
 from pathlib import Path
 import yt_dlp
 
-USER_DATA = os.path.expanduser("~/.local/share/loud")
-COOKIE_PATH = os.path.join(USER_DATA, "cookies.txt")
-YTDLP_BIN = "/usr/share/loud/venv/bin/yt-dlp"
+from config import COOKIES_PATH, YTDLP_BIN
 
 class MPVPlayer:
     def __init__(self, ipc_socket: str = "/tmp/loud_mpv.sock"):
@@ -19,6 +17,11 @@ class MPVPlayer:
         if os.path.exists(self.ipc_socket):
             os.remove(self.ipc_socket)
 
+        raw_opts = "js-runtimes=node,remote-components=ejs:github"
+
+        if COOKIES_PATH:
+            raw_opts += f",cookies={COOKIES_PATH}"
+
         cmd = [
             "mpv",
             "--no-video",
@@ -28,10 +31,13 @@ class MPVPlayer:
             "--network-timeout=15",
             "--stream-lavf-o=reconnect=1,reconnect_at_eof=1,reconnect_streamed=1",
             "--demuxer-max-bytes=10M",
-            f"--cookies-file={COOKIE_PATH}",
             f"--script-opts=ytdl_hook-ytdl_path={YTDLP_BIN}",
-            f"--ytdl-raw-options=cookies={COOKIE_PATH},js-runtimes=node,remote-components=ejs:github"
+            f"--ytdl-raw-options={raw_opts}",
         ]
+
+        if COOKIES_PATH:
+            cmd.append(f"--cookies-file={COOKIES_PATH}")
+
         self.process = subprocess.Popen(
             cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
         )
@@ -43,7 +49,7 @@ class MPVPlayer:
             'no_warnings': True,
             'default_search': 'ytsearch',
             'noplaylist': True,
-            'cookiefile': COOKIE_PATH,
+            'cookiefile': COOKIES_PATH,
             'js_runtimes': ['node'],
             'remote_components': ['ejs:github'],
             'extractor_args': {
